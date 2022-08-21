@@ -7,7 +7,7 @@ export default function useAuthenticate() {
 
   async function login() {
     var d = new Date();
-    d.setMinutes(d.getMinutes() + 30);
+    d.setMinutes(d.getMinutes() + 60);
 
     var options = { expirationTime: d };
     const payload = await sdk?.auth.login(domain, options);
