@@ -2,7 +2,7 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { NextApiRequest, NextApiResponse } from "next";
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
-const name = "projects/818686884686/secrets/PRIVATE_KEY/versions/latest";
+const name = process.env.GOGGLE_SECRET_NAME;
 
 // Instantiates a client
 const client = new SecretManagerServiceClient();
@@ -22,7 +22,7 @@ async function accessSecretVersion() {
   return payload;
 }
 
-const authenticate = async (req: NextApiRequest, res: NextApiResponse) => {
+const submitreview = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     return res.status(400).json({
       error: "Invalid method. Only POST supported.",
@@ -54,4 +54,4 @@ const authenticate = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(address);
 };
 
-export default authenticate;
+export default submitreview;

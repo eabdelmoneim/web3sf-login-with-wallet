@@ -20,8 +20,8 @@ export default function useAuthenticate() {
     });
   }
 
-  async function authenticate() {
-    const res = await fetch("/api/authenticate", {
+  async function submitReview() {
+    const res = await fetch("/api/submitreview", {
       method: "POST",
     });
     return res;
@@ -35,7 +35,7 @@ export default function useAuthenticate() {
 
   return {
     login,
-    authenticate,
+    submitReview,
     logout,
   };
 }
