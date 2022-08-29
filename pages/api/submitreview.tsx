@@ -4,7 +4,7 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { AddressSchema } from "@thirdweb-dev/sdk/dist/src/schema";
 import Airtable from "airtable";
 
-const name = process.env.GOGGLE_SECRET_NAME;
+const name = process.env.GOOGLE_SECRET_NAME;
 
 // Instantiates a client
 const client = new SecretManagerServiceClient();
