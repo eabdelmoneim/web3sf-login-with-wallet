@@ -23,6 +23,9 @@ export default function useAuthenticate() {
   async function submitReview() {
     const res = await fetch("/api/submitreview", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     return res;
   }

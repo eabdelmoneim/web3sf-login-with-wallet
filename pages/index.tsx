@@ -1,13 +1,17 @@
 import type { NextPage } from "next";
 
 import useAuthenticate from "../hooks/useAuthenticate";
-import { useAddress, useDisconnect, useMetamask } from "@thirdweb-dev/react";
+import {
+  ConnectWallet,
+  useAddress,
+  useDisconnect,
+  useMetamask,
+} from "@thirdweb-dev/react";
 import { useState } from "react";
 import Hero from "../components/Hero";
 import {
   Button,
   Center,
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -34,6 +38,7 @@ const Home: NextPage = () => {
   const { login, submitReview, logout } = useAuthenticate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [authMessage, setAuthMessage] = useState("N/A");
 
   const signInWithEthereum = async () => {
@@ -46,10 +51,11 @@ const Home: NextPage = () => {
   const authenticatedRequest = async () => {
     const res = await submitReview();
     if (res.ok) {
-      const address = await res.json();
+      const data = await res.json();
+      console.log("rating submitted: " + data);
       toast({
         title: "Rating submitted.",
-        description: "We've sent a POAP NFT to your wallet",
+        description: "",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -65,6 +71,9 @@ const Home: NextPage = () => {
         duration: 9000,
         isClosable: true,
       });
+
+      setIsSubmitted(true);
+      onClose();
       /* setAuthMessage(
         `Failed to authenticate, backend responded with ${res.status} (${res.statusText})`
       );*/
@@ -81,18 +90,34 @@ const Home: NextPage = () => {
     <>
       <Hero />
       <Center>
-        <Button
-          colorScheme={"purple"}
-          bg={"purple.400"}
-          rounded={"full"}
-          px={6}
-          _hover={{
-            bg: "blue.500",
-          }}
-          onClick={onOpen}
-        >
-          Rate the Workshop
-        </Button>
+        {address ? (
+          <Button
+            colorScheme={"purple"}
+            bg={"purple.400"}
+            rounded={"full"}
+            px={6}
+            _hover={{
+              bg: "blue.500",
+            }}
+            onClick={onOpen}
+          >
+            Rate the Workshop
+          </Button>
+        ) : (
+          /*<Button
+            colorScheme={"purple"}
+            bg={"purple.400"}
+            rounded={"full"}
+            px={6}
+            _hover={{
+              bg: "blue.500",
+            }}
+            onClick={connectWithMetamask}
+          >
+            Connect Wallet
+          </Button>*/
+          <ConnectWallet></ConnectWallet>
+        )}
       </Center>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -112,6 +137,7 @@ const Home: NextPage = () => {
                     <Radio value="aight">Aight</Radio>
                     <Radio value="waste">Waste of time</Radio>
                     <Button
+                      isLoading={isSubmitted}
                       colorScheme={"purple"}
                       bg={"purple.400"}
                       //rounded={"full"}
@@ -120,6 +146,7 @@ const Home: NextPage = () => {
                         bg: "blue.500",
                       }}
                       onClick={() => {
+                        setIsSubmitted(true);
                         authenticatedRequest();
                         onClose();
                       }}
@@ -141,7 +168,7 @@ const Home: NextPage = () => {
                 }}
                 onClick={signInWithEthereum}
               >
-                Sign-In with Wallet
+                Sign in with Ethereum
               </Button>
             )}
           </ModalBody>

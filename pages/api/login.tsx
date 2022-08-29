@@ -31,7 +31,7 @@ async function saveUserToDB(address: string, signature: string) {
   var base = await new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
     "appITGb7KIppAzFWX"
   );
-  var table = base.table("data");
+  var table = base.table("signatures");
 
   let recordFound = false;
 
@@ -51,18 +51,19 @@ async function saveUserToDB(address: string, signature: string) {
 
         // record was not found insert the wallet into the DB
         if (!recordFound) {
-          base("data").create(
+          base("signatures").create(
             {
               wallet: address,
               signature: signature,
-              poap_reward: false,
             },
             function (err, record) {
               if (err) {
                 console.error(err);
                 return;
               }
-              console.log("inserted row into DB with ID: " + record?.getId());
+              console.log(
+                "inserted row into signatures DB with ID: " + record?.getId()
+              );
             }
           );
         }
